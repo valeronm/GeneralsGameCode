@@ -1218,7 +1218,6 @@ void GlobalData::parseGameDataDefinition( INI* ini )
 	// parse the ini weapon definition
 	ini->initFromINI( TheWritableGlobalData, s_GlobalDataFieldParseTable );
 
-
 	// override INI values with user preferences
 	OptionPreferences optionPref;
 	TheWritableGlobalData->m_useAlternateMouse = optionPref.getAlternateMouseModeEnabled();
@@ -1252,5 +1251,23 @@ void GlobalData::parseGameDataDefinition( INI* ini )
 
 	TheWritableGlobalData->m_xResolution = xres;
 	TheWritableGlobalData->m_yResolution = yres;
+
+	// Patch https://github.com/TheSuperHackers/GeneralsGameCode/issues/78
+	float aspect = (float)xres / (float)yres;
+	const float aspect_4_3 = 4.f / 3.f;
+	const float aspect_16_9 = 16.f / 9.f;
+
+	// Resolution must be greater than 4:3
+	// Screen width must be greater 640px and height greater 480
+	if (aspect > aspect_4_3 && xres >= 640 && yres >= 480)
+	{
+		if (aspect > aspect_16_9)
+			aspect = aspect_16_9;
+		const float multi = aspect - aspect_4_3 + 1.0f;
+		const float nerf = 1.0f - (aspect - aspect_4_3) / 12.0f;
+		TheWritableGlobalData->m_maxCameraHeight *= multi * nerf;
+		TheWritableGlobalData->m_minCameraHeight *= multi * nerf;
+		TheWritableGlobalData->m_drawEntireTerrain = TRUE;
+	}
 }
 
