@@ -257,14 +257,18 @@ void WaterRenderObjClass::setupJbaWaterShader(void)
 		DX8Wrapper::_Set_DX8_Transform(D3DTS_TEXTURE2, *(Matrix4x4*)&destMatrix);
 		
 	}
-	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 1, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 1, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 2, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 2, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 3, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 3, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAXANISOTROPY, 16);
+	m_pDev->SetTextureStageState( 1, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 1, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 1, D3DTSS_MAXANISOTROPY, 16);
+	m_pDev->SetTextureStageState( 2, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 2, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 2, D3DTSS_MAXANISOTROPY, 16);
+	m_pDev->SetTextureStageState( 3, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 3, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 3, D3DTSS_MAXANISOTROPY, 16);
 	if (m_riverWaterPixelShader){
 		DX8Wrapper::_Get_D3D_Device8()->SetPixelShaderConstant(0,   D3DXVECTOR4(REFLECTION_FACTOR, REFLECTION_FACTOR, REFLECTION_FACTOR, 1.0f), 1);
 		DX8Wrapper::_Get_D3D_Device8()->SetPixelShader(m_riverWaterPixelShader);
@@ -1838,8 +1842,8 @@ void WaterRenderObjClass::drawSea(RenderInfoClass & rinfo)
 	m_pDev->SetTextureStageState( 3, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
 	m_pDev->SetTextureStageState( 3, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_PASSTHRU|3);
 
-//	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-//	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
+//	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+//	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
 //	m_pDev->SetTextureStageState( 0, D3DTSS_MIPFILTER, D3DTEXF_POINT );
 
 //	m_pDev->SetTextureStageState( 1, D3DTSS_MINFILTER, D3DTEXF_POINT );
@@ -1857,8 +1861,9 @@ void WaterRenderObjClass::drawSea(RenderInfoClass & rinfo)
 	m_pDev->SetTexture( 0, m_pBumpTexture[m_iBumpFrame]);
 #ifdef MIPMAP_BUMP_TEXTURE
 	m_pDev->SetTextureStageState( 0, D3DTSS_MIPFILTER, D3DTEXF_POINT );
-	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAXANISOTROPY, 16);
 #endif
 	m_pDev->SetTextureStageState( 1, D3DTSS_BUMPENVMAT00, F2DW(m_fBumpScale) );
 	m_pDev->SetTextureStageState( 1, D3DTSS_BUMPENVMAT01, F2DW(0.0f) );
@@ -3028,12 +3033,15 @@ void WaterRenderObjClass::setupFlatWaterShader(void)
 		DX8Wrapper::_Set_DX8_Transform(D3DTS_TEXTURE2, *(Matrix4x4*)&destMatrix);
 
 	}
-	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 1, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 1, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 2, D3DTSS_MINFILTER, D3DTEXF_LINEAR );
-	m_pDev->SetTextureStageState( 2, D3DTSS_MAGFILTER, D3DTEXF_LINEAR );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 0, D3DTSS_MAXANISOTROPY, 16);
+	m_pDev->SetTextureStageState( 1, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 1, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 1, D3DTSS_MAXANISOTROPY, 16);
+	m_pDev->SetTextureStageState( 2, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 2, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pDev->SetTextureStageState( 2, D3DTSS_MAXANISOTROPY, 16);
 	if (m_trapezoidWaterPixelShader){
 		DX8Wrapper::_Get_D3D_Device8()->SetPixelShaderConstant(0,   D3DXVECTOR4(REFLECTION_FACTOR, REFLECTION_FACTOR, REFLECTION_FACTOR, 1.0f), 1);
 		DX8Wrapper::_Get_D3D_Device8()->SetPixelShader(m_trapezoidWaterPixelShader);

@@ -3821,8 +3821,8 @@ void DX8Wrapper::Apply_Default_State()
 		Set_DX8_Texture_Stage_State(i, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP);
 		Set_DX8_Texture_Stage_State(i, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP);
 		Set_DX8_Texture_Stage_State(i, D3DTSS_BORDERCOLOR, 0);
-//		Set_DX8_Texture_Stage_State(i, D3DTSS_MAGFILTER, D3DTEXF_LINEAR);
-//		Set_DX8_Texture_Stage_State(i, D3DTSS_MINFILTER, D3DTEXF_LINEAR);
+//		Set_DX8_Texture_Stage_State(i, D3DTSS_MAGFILTER, D3DTEXF_ANISOTROPIC);
+//		Set_DX8_Texture_Stage_State(i, D3DTSS_MINFILTER, D3DTEXF_ANISOTROPIC);
 //		Set_DX8_Texture_Stage_State(i, D3DTSS_MIPFILTER, D3DTEXF_LINEAR);
 //		Set_DX8_Texture_Stage_State(i, D3DTSS_MIPMAPLODBIAS, 0);
 //		Set_DX8_Texture_Stage_State(i, D3DTSS_MAXMIPLEVEL, 0);
