@@ -74,6 +74,7 @@
 #include "GameClient/SelectionXlat.h"
 #include "GameClient/Shell.h"
 #include "GameClient/Snow.h"
+#include "GameClient/SystemOverrides.h"
 #include "GameClient/TerrainVisual.h"
 #include "GameClient/View.h"
 #include "GameClient/VideoPlayer.h"
@@ -297,6 +298,7 @@ void GameClient::init( void )
 		//
 
 		// since we only allocate one of each, don't bother pooling 'em
+		m_translators[ m_numTranslators++ ] =	TheMessageStream->attachTranslator( MSGNEW("GameClientSubsystem") SystemOverrides, 1 );
 		m_translators[ m_numTranslators++ ] =	TheMessageStream->attachTranslator( MSGNEW("GameClientSubsystem") WindowTranslator,     10 );
 		m_translators[ m_numTranslators++ ] =	TheMessageStream->attachTranslator( MSGNEW("GameClientSubsystem") MetaEventTranslator,	20 );
 		m_translators[ m_numTranslators++ ] =	TheMessageStream->attachTranslator( MSGNEW("GameClientSubsystem") HotKeyTranslator,	25 );
