@@ -76,6 +76,7 @@
 #include "GameClient/LanguageFilter.h"
 #include "GameClient/Shadow.h"
 #include "GameClient/GameText.h"
+#include "GameClient/SystemOverrides.h"
 
 //#define KRIS_BRUTAL_HACK_FOR_AIRCRAFT_CARRIER_DEBUGGING 
 #ifdef KRIS_BRUTAL_HACK_FOR_AIRCRAFT_CARRIER_DEBUGGING
@@ -113,13 +114,6 @@ static const char *TheDrawableIconNames[] =
 	"CarBomb",
 	NULL
 };
-
-// Scale factor based on the current resolution compared to base 800x600
-static float resScaleFactor() {
-	const int xRes = TheGlobalData->m_xResolution;
-	const int yRes = TheGlobalData->m_yResolution;
-	return static_cast<float>(min(xRes / 800.0, yRes / 600.0));
-}
 
 /** 
  * Returns a special DynamicAudioEventInfo which can be used to mark a sound as "no sound".
@@ -2709,7 +2703,7 @@ static Bool computeHealthRegion( const Drawable *draw, IRegion2D& region )
 	if (!obj->getHealthBoxDimensions(healthBoxHeight, healthBoxWidth))
 		return FALSE;
 
-	Real scale = resScaleFactor();
+	Real scale = TheSystemOverrides->m_resScaleFactor;
 
 	// scale the health bars according to the zoom
 	Real zoom = TheTacticalView->getZoom();
@@ -2914,7 +2908,7 @@ void Drawable::drawAmmo( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real scale = TheGlobalData->m_ammoPipScaleFactor / CLAMP_ICON_ZOOM_FACTOR( TheTacticalView->getZoom() );
 #else
-	Real scale = resScaleFactor();
+	Real scale = TheSystemOverrides->m_resScaleFactor;
 #endif
 
 	Int boxWidth  = REAL_TO_INT(s_emptyAmmo->getImageWidth() * scale);
@@ -2982,7 +2976,7 @@ void Drawable::drawContained( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real scale = TheGlobalData->m_ammoPipScaleFactor / CLAMP_ICON_ZOOM_FACTOR( TheTacticalView->getZoom() );
 #else
-	Real scale = resScaleFactor();
+	Real scale = TheSystemOverrides->m_resScaleFactor;
 #endif
 	Int boxWidth  = REAL_TO_INT(s_emptyContainer->getImageWidth() * scale);
 	Int boxHeight = REAL_TO_INT(s_emptyContainer->getImageHeight() * scale);
@@ -3285,8 +3279,6 @@ void Drawable::drawHealing(const IRegion2D* healthBarRegion)
 		scale = 0.7f;
 	}
 
-	scale *= resScaleFactor();
-
 	//
 	// if we are to show healing make sure we have the animation for it allocated, otherwise
 	// free any animation we may have allocated back to the animation memory pool
@@ -3311,6 +3303,10 @@ void Drawable::drawHealing(const IRegion2D* healthBarRegion)
 
 				Int frameWidth = getIconInfo()->m_icon[ typeIndex ]->getCurrentFrameWidth();
 				Int frameHeight = getIconInfo()->m_icon[ typeIndex ]->getCurrentFrameHeight();
+
+				scale = TheSystemOverrides->m_resScaleFactor;
+				frameWidth *= scale;
+				frameHeight *= scale;
 
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 				// adjust the width to be a % of the health bar region size
@@ -3824,7 +3820,7 @@ void Drawable::drawVeterancy( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real objScale = scale * 1.55f;
 #else
-	Real objScale = resScaleFactor();
+	Real objScale = TheSystemOverrides->m_resScaleFactor;
 #endif
 
 	Real vetBoxWidth  = image->getImageWidth()*objScale;
