@@ -7,7 +7,7 @@ option(GENZH_BUILD_ZEROHOUR_TOOLS "Build tools for Zero Hour" OFF)
 add_feature_info(ZeroHourTools GENZH_BUILD_ZEROHOUR_TOOLS "Build Zero Hour Mod Tools")
 
 # Set where the build results will end up
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/GeneralsMD/Run")
 
 # Add main build targets
 add_subdirectory(Code)

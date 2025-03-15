@@ -7,7 +7,7 @@ option(GENZH_BUILD_GENERALS_TOOLS "Build tools for Generals" OFF)
 add_feature_info(GeneralsTools GENZH_BUILD_GENERALS_TOOLS "Build Generals Mod Tools")
 
 # Set where the build results will end up
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Generals/Run")
 
 # Add main build targets
 add_subdirectory(Code)
