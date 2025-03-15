@@ -114,6 +114,12 @@ static const char *TheDrawableIconNames[] =
 	NULL
 };
 
+// Scale factor based on the current resolution compared to base 800x600
+static float resScaleFactor() {
+	const int xRes = TheGlobalData->m_xResolution;
+	const int yRes = TheGlobalData->m_yResolution;
+	return static_cast<float>(min(xRes / 800.0, yRes / 600.0));
+}
 
 /** 
  * Returns a special DynamicAudioEventInfo which can be used to mark a sound as "no sound".
@@ -2703,19 +2709,21 @@ static Bool computeHealthRegion( const Drawable *draw, IRegion2D& region )
 	if (!obj->getHealthBoxDimensions(healthBoxHeight, healthBoxWidth))
 		return FALSE;
 
+	Real scale = resScaleFactor();
+
 	// scale the health bars according to the zoom
 	Real zoom = TheTacticalView->getZoom();
 	//Real widthScale = 1.3f / zoom;
-	Real widthScale = 1.0f / zoom;
+	Real widthScale = scale / zoom;
 	//Real heightScale = 0.8f / zoom; 
-	Real heightScale = 1.0f; 
+	Real heightScale = scale;
 
 	healthBoxWidth *= widthScale;
 	healthBoxHeight *= heightScale;
 
 	// do this so health bar doesn't get too skinny or fat after scaling
 	//healthBoxHeight = max(3.0f, healthBoxHeight);
-	healthBoxHeight = 3.0f;
+	healthBoxHeight = 3.0f * scale;
 
 	// figure out the final region for the health box
 	region.lo.x = screenCenter.x - healthBoxWidth * 0.45f;
@@ -2906,7 +2914,7 @@ void Drawable::drawAmmo( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real scale = TheGlobalData->m_ammoPipScaleFactor / CLAMP_ICON_ZOOM_FACTOR( TheTacticalView->getZoom() );
 #else
-	Real scale = 1.0f;
+	Real scale = resScaleFactor();
 #endif
 
 	Int boxWidth  = REAL_TO_INT(s_emptyAmmo->getImageWidth() * scale);
@@ -2974,7 +2982,7 @@ void Drawable::drawContained( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real scale = TheGlobalData->m_ammoPipScaleFactor / CLAMP_ICON_ZOOM_FACTOR( TheTacticalView->getZoom() );
 #else
-	Real scale = 1.0f;
+	Real scale = resScaleFactor();
 #endif
 	Int boxWidth  = REAL_TO_INT(s_emptyContainer->getImageWidth() * scale);
 	Int boxHeight = REAL_TO_INT(s_emptyContainer->getImageHeight() * scale);
@@ -3276,6 +3284,8 @@ void Drawable::drawHealing(const IRegion2D* healthBarRegion)
 		typeIndex = ICON_DEFAULT_HEAL;
 		scale = 0.7f;
 	}
+
+	scale *= resScaleFactor();
 
 	//
 	// if we are to show healing make sure we have the animation for it allocated, otherwise
@@ -3814,9 +3824,8 @@ void Drawable::drawVeterancy( const IRegion2D *healthBarRegion )
 #ifdef SCALE_ICONS_WITH_ZOOM_ML
 	Real objScale = scale * 1.55f;
 #else
-	Real objScale = 1.0f;
+	Real objScale = resScaleFactor();
 #endif
-
 
 	Real vetBoxWidth  = image->getImageWidth()*objScale;
 	Real vetBoxHeight = image->getImageHeight()*objScale;
@@ -5647,4 +5656,3 @@ void TintEnvelope::loadPostProcess( void )
 {
 
 }  // end loadPostProcess
-
