@@ -221,6 +221,7 @@ set(GAMEENGINE_SRC
     Include/GameClient/ShellMenuScheme.h
     Include/GameClient/Smudge.h
     Include/GameClient/Snow.h
+    Include/GameClient/SystemOverrides.h
     Include/GameClient/Statistics.h
     Include/GameClient/TerrainRoads.h
     Include/GameClient/TerrainVisual.h
@@ -811,6 +812,7 @@ set(GAMEENGINE_SRC
     Source/GameClient/MessageStream/MetaEvent.cpp
     Source/GameClient/MessageStream/PlaceEventTranslator.cpp
     Source/GameClient/MessageStream/SelectionXlat.cpp
+    Source/GameClient/MessageStream/SystemOverrides.cpp
     Source/GameClient/MessageStream/WindowXlat.cpp
     Source/GameClient/ParabolicEase.cpp
     Source/GameClient/RadiusDecal.cpp
