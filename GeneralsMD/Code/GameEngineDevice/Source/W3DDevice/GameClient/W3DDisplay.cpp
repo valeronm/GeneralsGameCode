@@ -468,20 +468,19 @@ W3DDisplay::~W3DDisplay()
 
 }  // end ~W3DDisplay
 
-#define MIN_DISPLAY_RESOLUTION_X	800
-#define MIN_DISPLAY_RESOLUTOIN_Y	600
-
-
-Bool IS_FOUR_BY_THREE_ASPECT( Real x, Real y )
+// Only accept 24-bit modes with min width 800 and 5:4 to 16:9 aspect ratio
+Bool isResolutionSupported(const ResolutionDescClass &res)
 {
-  if ( y == 0 )
-    return FALSE;
-  
-  Real aspectRatio = fabs( x / y ); 
-  return (( aspectRatio > 1.332f) && ( aspectRatio < 1.334f));
-  
-}
+	static const Int minWidth = 800;
+	static const Real aspectRatio5To4 = 5.0f / 4;
+	static const Real aspectRatio16To9 = 16.0f / 9;
 
+	if (res.Height == 0 || res.BitDepth < 24 || res.Width < minWidth)
+		return FALSE;
+
+	const Real aspectRatio = static_cast<Real>(res.Width) / static_cast<Real>(res.Height);
+	return aspectRatio5To4 <= aspectRatio && aspectRatio <= aspectRatio16To9;
+}
 
 /*Return number of screen modes supported by the current device*/
 Int W3DDisplay::getDisplayModeCount(void)
@@ -506,8 +505,7 @@ Int W3DDisplay::getDisplayModeCount(void)
 	for (int res = 0; res < resolutions.Count ();  res ++)
 	{
 		// Is this the resolution we are looking for?
-		if (resolutions[res].BitDepth >= 24 && resolutions[res].Width >= MIN_DISPLAY_RESOLUTION_X 
-      && IS_FOUR_BY_THREE_ASPECT( (Real)resolutions[res].Width, (Real)resolutions[res].Height ) )	//only accept 4:3 aspect ratio modes.
+		if (isResolutionSupported(resolutions[res]))
 		{	
 			numResolutions++;
 		}
@@ -525,8 +523,7 @@ void W3DDisplay::getDisplayModeDescription(Int modeIndex, Int *xres, Int *yres, 
 	for (int res = 0; res < resolutions.Count ();  res ++)
 	{
 		// Is this the resolution we are looking for?
-		if ( resolutions[res].BitDepth >= 24 && resolutions[res].Width >= MIN_DISPLAY_RESOLUTION_X 
-      && IS_FOUR_BY_THREE_ASPECT( (Real)resolutions[res].Width, (Real)resolutions[res].Height ) )	//only accept 4:3 aspect ratio modes.
+		if (isResolutionSupported(resolutions[res]))
 		{	
 			if (numResolutions == modeIndex)
 			{	//found the mode
