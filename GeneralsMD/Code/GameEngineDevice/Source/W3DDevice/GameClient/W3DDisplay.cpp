@@ -468,18 +468,13 @@ W3DDisplay::~W3DDisplay()
 
 }  // end ~W3DDisplay
 
-// TheSuperHackers @tweak valeronm 20/03/2025 Only accept 24-bit modes with min width 800 and 5:4 to 16:9 aspect ratio
-Bool isResolutionSupported(const ResolutionDescClass &res)
+// TheSuperHackers @tweak valeronm 20/03/2025 Only accept 24-bit modes with min width 800
+inline Bool isResolutionSupported(const ResolutionDescClass &res)
 {
 	static const Int minWidth = 800;
-	static const Real minAspectRatio = 5.0f / 4;
-	static const Real maxAspectRatio = 16.0f / 9;
+	static const Int minBitDepth = 24;
 
-	if (res.Width < minWidth || res.Height == 0 || res.BitDepth < 24)
-		return FALSE;
-
-	const Real aspectRatio = static_cast<Real>(res.Width) / static_cast<Real>(res.Height);
-	return minAspectRatio <= aspectRatio && aspectRatio <= maxAspectRatio;
+	return res.Width >= minWidth && res.BitDepth >= minBitDepth;
 }
 
 /*Return number of screen modes supported by the current device*/
