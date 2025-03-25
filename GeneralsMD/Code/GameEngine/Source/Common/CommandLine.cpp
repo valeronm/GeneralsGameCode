@@ -862,6 +862,29 @@ Int parseQuickStart( char *args[], int num )
 	return 1;
 }
 
+Int parseConsole(char* args[], int num)
+{
+	if (TheWritableGlobalData)
+	{
+		TheWritableGlobalData->m_windowed = true;
+
+		TheWritableGlobalData->m_playIntro = FALSE;
+		TheWritableGlobalData->m_afterIntro = TRUE;
+		TheWritableGlobalData->m_playSizzle = FALSE;
+	}
+
+	AllocConsole();
+
+	// Redirect stdout, stderr, and stdin to the console
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+	freopen("CONIN$", "r", stdin);
+
+	SetConsoleTitle(TEXT("Debug Console"));
+	printf("Console is ready for output. Closing the console will also close the game instantly.\n");
+	return 1;
+}
+
 Int parseConstantDebug( char *args[], int num )
 {
 	if (TheWritableGlobalData)
@@ -1204,6 +1227,7 @@ static CommandLineParam params[] =
 	{ "-mod", parseMod },
 	{ "-noshaders", parseNoShaders },
 	{ "-quickstart", parseQuickStart },
+	{ "-console", parseConsole },
 
 #if (defined(RTS_DEBUG) || defined(RTS_INTERNAL))
 	{ "-noaudio", parseNoAudio },
