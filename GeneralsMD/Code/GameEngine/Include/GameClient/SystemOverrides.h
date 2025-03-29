@@ -35,7 +35,11 @@ public:
 	GameMessageDisposition translateGameMessage(const GameMessage *msg);
 	Real m_resScaleFactor;
 private:
-	Bool m_resScaleEnabled;
+	Bool m_resScaleOn;
+	Bool m_tacticalViewOn;
+
+	Real m_tacticalViewZoom;
+	Real m_tacticalViewPitch;
 };
 
 extern SystemOverrides *TheSystemOverrides;

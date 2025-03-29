@@ -32,9 +32,11 @@
 SystemOverrides *TheSystemOverrides = NULL;
 
 //-----------------------------------------------------------------------------
-SystemOverrides::SystemOverrides() : m_resScaleFactor(1.0)
+SystemOverrides::SystemOverrides() :
+	m_resScaleFactor(1.0),
+	m_tacticalViewPitch(-PI / 5),
+	m_tacticalViewZoom(2.5)
 {
-	DEBUG_ASSERTCRASH(!TheSystemOverridesTranslator, ("Already have a SystemOverridesTranslator - why do you need two?"));
 	TheSystemOverrides = this;
 }
 
@@ -64,10 +66,10 @@ GameMessageDisposition SystemOverrides::translateGameMessage(const GameMessage *
 
 			switch (key)
 			{
-				case KEY_F12:
+				case KEY_F1:
 					if (isPressed) {
-						m_resScaleEnabled = !m_resScaleEnabled;
-						if (m_resScaleEnabled) {
+						m_resScaleOn = !m_resScaleOn;
+						if (m_resScaleOn) {
 							const int xRes = TheGlobalData->m_xResolution;
 							const int yRes = TheGlobalData->m_yResolution;
 							m_resScaleFactor = static_cast<float>(min(xRes / 800.0, yRes / 600.0));
@@ -76,6 +78,26 @@ GameMessageDisposition SystemOverrides::translateGameMessage(const GameMessage *
 							m_resScaleFactor = 1.0;
 							TheInGameUI->message(UnicodeString(L"Resolution based icon scale disabled"));
 						}
+					}
+					return DESTROY_MESSAGE;
+				case KEY_F2:
+					if (isPressed) {
+						if (m_tacticalViewOn)
+						{
+							TheTacticalView->setDefaultView(0, 0, 1.0);
+							TheTacticalView->setHeightAboveGround(TheGlobalData->m_maxCameraHeight);
+							TheTacticalView->setPitch(0);
+							TheInGameUI->message(UnicodeString(L"Switched to default wiew"));
+						}
+						else
+						{
+							static const Real heightMulti = 3;
+							TheTacticalView->setDefaultView(-PI / 5, 0, heightMulti);
+							TheTacticalView->setHeightAboveGround(TheGlobalData->m_maxCameraHeight * heightMulti);
+							TheTacticalView->setPitch(-PI / 5);
+							TheInGameUI->message(UnicodeString(L"Switched to tactical wiew"));
+						}
+						m_tacticalViewOn = !m_tacticalViewOn;
 					}
 					return DESTROY_MESSAGE;
 				default:
