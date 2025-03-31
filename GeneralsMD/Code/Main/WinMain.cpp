@@ -896,22 +896,6 @@ Int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		TheMemoryPoolCriticalSection = &critSec4;
 		TheDebugLogCriticalSection = &critSec5;
 
-		/// @todo remove this force set of working directory later
-		Char buffer[ _MAX_PATH ];
-		GetModuleFileName( NULL, buffer, sizeof( buffer ) );
-		Char *pEnd = buffer + strlen( buffer );
-		while( pEnd != buffer ) 
-		{
-			if( *pEnd == '\\' ) 
-			{
-				*pEnd = 0;
-				break;
-			}
-			pEnd--;
-		}
-		::SetCurrentDirectory(buffer);
-
-
 		/*
 		** Convert WinMain arguments to simple main argc and argv
 		*/
