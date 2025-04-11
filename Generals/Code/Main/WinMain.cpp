@@ -822,6 +822,14 @@ Int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	try {
 
 		_set_se_translator( DumpExceptionInfo ); // Hook that allows stack trace.
+
+		TheAsciiStringCriticalSection = &critSec1;
+		TheUnicodeStringCriticalSection = &critSec2;
+		TheDmaCriticalSection = &critSec3;
+		TheMemoryPoolCriticalSection = &critSec4;
+		TheDebugLogCriticalSection = &critSec5;
+
+#if 0
 		//
 		// there is something about checkin in and out the .dsp and .dsw files 
 		// that blows the working directory information away on each of the 
@@ -829,12 +837,6 @@ Int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		// working directory to the directory with the .exe since that's not the
 		// default in a DevStudio project
 		//
-
-		TheAsciiStringCriticalSection = &critSec1;
-		TheUnicodeStringCriticalSection = &critSec2;
-		TheDmaCriticalSection = &critSec3;
-		TheMemoryPoolCriticalSection = &critSec4;
-		TheDebugLogCriticalSection = &critSec5;
 
 		/// @todo remove this force set of working directory later
 		Char buffer[ _MAX_PATH ];
@@ -850,6 +852,7 @@ Int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			pEnd--;
 		}
 		::SetCurrentDirectory(buffer);
+#endif
 
 
 		/*
