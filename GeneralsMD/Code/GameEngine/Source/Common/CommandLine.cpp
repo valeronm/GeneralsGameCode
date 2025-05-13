@@ -871,6 +871,29 @@ Int parseHeadless( char *args[], int num )
 	return 1;
 }
 
+Int parseConsole(char* args[], int num)
+{
+	if (TheWritableGlobalData)
+	{
+		TheWritableGlobalData->m_windowed = true;
+
+		TheWritableGlobalData->m_playIntro = FALSE;
+		TheWritableGlobalData->m_afterIntro = TRUE;
+		TheWritableGlobalData->m_playSizzle = FALSE;
+	}
+
+	AllocConsole();
+
+	// Redirect stdout, stderr, and stdin to the console
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+	freopen("CONIN$", "r", stdin);
+
+	SetConsoleTitle(TEXT("Debug Console"));
+	printf("Console is ready for output. Closing the console will also close the game instantly.\n");
+	return 1;
+}
+
 Int parseConstantDebug( char *args[], int num )
 {
 	if (TheWritableGlobalData)
@@ -1214,6 +1237,7 @@ static CommandLineParam params[] =
 	{ "-noshaders", parseNoShaders },
 	{ "-quickstart", parseQuickStart },
 	{ "-useWaveEditor", parseUseWaveEditor },
+	{ "-console", parseConsole },
 
 	// TheSuperHackers @feature helmutbuhler 11/04/2025
 	// This runs the game without a window, graphics, input and audio. Used for testing.
